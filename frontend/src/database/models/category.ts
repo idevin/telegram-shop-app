@@ -1,4 +1,4 @@
-import { DataTypes, Deferrable, Optional, Model } from "sequelize"
+import { DataTypes, Optional, Model } from "sequelize"
 import sequelize from "../index"
 import Shop from "./shop"
 
@@ -37,8 +37,7 @@ const Category = sequelize.define<CategoryInstance>(
             type: DataTypes.INTEGER,
             references: {
                 model: Shop,
-                key: "botID",
-                deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                key: "botID"
             },
         },
     },

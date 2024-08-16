@@ -28,8 +28,7 @@ const Note = sequelize.define<NoteInstance>(
             type: DataTypes.UUID,
             references: {
                 model: Payment,
-                key: "id",
-                deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                key: "id"
             },
         },
         text: {

@@ -1,17 +1,13 @@
-const { Sequelize } = require("sequelize")
+const {Sequelize} = require("sequelize")
 
 
 const sequelize = new Sequelize(
-    process.env.DATABASE_URL,
+    '', '', '',
     {
-        dialect: "postgres",
-        protocol: "postgres",
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        }
+        database: 'papa_food_db',
+        dialect: "sqlite",
+        storage: "../database/db.sqlite",
+        protocol: "sqlite"
     }
 )
 
@@ -19,7 +15,7 @@ sequelize
     .authenticate()
     .then(async () => {
         console.log("Connection has been established successfully.")
-        sequelize.sync({ force: true })
+        // await sequelize.sync({force: true})
     })
     .catch(error => console.log("Unable to connect to the database", error))
 

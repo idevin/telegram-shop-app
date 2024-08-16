@@ -1,20 +1,17 @@
-const { Markup } = require("telegraf")
+const {Markup} = require("telegraf")
 
 
 module.exports = {
-    welcomeMessage: function (shopName) {
-        return `Welcome to <b>${shopName}</b>
+    welcomeMessage: function (ctx) {
 
-insert shop description here
-
-<i>Press a key on the bottom keyboard to select an option.</i>
-<i>If the keyboard has not opened, you can open it by pressing the button with four small squares in the message bar.</i>
-`
+        return `
+            Welcome to <b>${ctx.botInfo.first_name}</b>
+        `
     },
     welcomeMenuButtons: function () {
         return Markup
             .keyboard([
-                ["📚 View Categories", "🛒 View Cart"]
+                ["📚 Categories", "🛒 Cart"]
             ])
             .resize()
     },

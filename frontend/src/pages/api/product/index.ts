@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next"
+import type {NextApiRequest, NextApiResponse} from "next"
 import AWS from "aws-sdk"
 
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { method, body: { name, data, type } } = req
+let imageUploader = async (req: NextApiRequest, res: NextApiResponse) => {
+    const {method, body: {name, data, type}} = req
     console.log(type)
 
     switch (method) {
@@ -30,3 +30,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             })
     }
 }
+
+export default imageUploader

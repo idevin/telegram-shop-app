@@ -1,4 +1,4 @@
-import { DataTypes, Deferrable, Model } from "sequelize"
+import { DataTypes, Model } from "sequelize"
 import sequelize from "../index"
 import User from "./user"
 
@@ -41,8 +41,7 @@ const Shop = sequelize.define<ShopInstance>(
             type: DataTypes.INTEGER,
             references: {
                 model: User,
-                key: "telegramID",
-                deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                key: "telegramID"
             },
         },
     },

@@ -4,6 +4,7 @@
     "description": "",
     "main": "app.js",
     "scripts": {
+        "all": "cd telegram && npm i && cd ../frontend && npm i && cd ../cron && npm i",
         "dev:telegram": "cd telegram && npm run dev",
         "dev:frontend": "cd frontend && npm run dev",
         "dev:cron": "cd cron && npm run dev"

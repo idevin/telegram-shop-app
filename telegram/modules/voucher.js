@@ -21,12 +21,16 @@ module.exports = {
     generateVoucher: async function (ctx) {
         const shop = await Database.getShopByID(ctx.botInfo.id)
 
-        const voucher = await Models.Voucher.create({
+        const voucherData = {
             code: faker.lorem.word(),
             discount: Math.floor(Math.random() * (20 - 1 + 1) + 1),     // 1% - 20%
             shopID: shop.toJSON().botID,
             isValid: true,
-        })
+        }
+
+        console.log("Voucher created", voucherData)
+
+        const voucher = await Models.Voucher.create(voucherData)
         return voucher.toJSON().code
     }
 }

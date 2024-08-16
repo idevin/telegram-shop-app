@@ -19,17 +19,22 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "baseUrl": ".",
+        "baseUrl": "./",
         "paths": {
-            "@/database/*": ["src/database/*"]
-        },
+            "@/database/*": [
+                "src/database/*"
+            ],
+            "crypto": [
+                "node_modules/crypto-js"
+            ]
+        }
     },
     "include": [
         "next-env.d.ts",
         "**/*.ts",
-        "**/*.tsx",
+        "**/*.tsx"
     ],
     "exclude": [
         "node_modules"
-    ],
+    ]
 }

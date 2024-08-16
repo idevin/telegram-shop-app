@@ -1,5 +1,5 @@
 const Models = require("../models")
-const { Op } = require("sequelize")
+const {Op} = require("sequelize")
 const moment = require("moment")
 
 
@@ -36,12 +36,12 @@ module.exports = {
     },
     getPendingOrderByUser: async function (shopID, userID) {
         const data = await Models.Shop.findOne({
-            where: { botID: String(shopID) },
+            where: {botID: String(shopID)},
             include: [{
                 model: Models.Order,
                 where: {
                     userID: String(userID),
-                    status: { [Op.eq]: "PENDING" }
+                    status: {[Op.eq]: "PENDING"}
                 }
             }]
         })
@@ -49,10 +49,10 @@ module.exports = {
     },
     getProductByName: async function (shopID, productName) {
         const data = await Models.Category.findOne({
-            where: { shopID: String(shopID) },
+            where: {shopID: String(shopID)},
             include: [{
                 model: Models.Product,
-                where: { name: productName }
+                where: {name: productName}
             }]
         })
         return data.Products[0]
@@ -71,7 +71,7 @@ module.exports = {
     },
     getCategoryByShop: async function (shopID) {
         return await Models.Shop.findOne({
-            where: { botID: String(shopID) },
+            where: {botID: String(shopID)},
             include: [{
                 model: Models.Category,
                 include: [{
@@ -82,10 +82,10 @@ module.exports = {
     },
     getPendingCartByCategory: async function (shopID, categoryName, userID) {
         const data = await Models.Shop.findOne({
-            where: { botID: String(shopID) },
+            where: {botID: String(shopID)},
             include: [{
                 model: Models.Category,
-                where: { name: categoryName },
+                where: {name: categoryName},
                 include: [{
                     model: Models.Product,
                     include: [{
@@ -97,7 +97,7 @@ module.exports = {
                         required: true,
                         through: {
                             attributes: ["quantity"],
-                            where: { quantity: { [Op.ne]: 0 } },     // Retrieve orders that has a quantity
+                            where: {quantity: {[Op.ne]: 0}},     // Retrieve orders that has a quantity
                         }
                     }],
                 }]
@@ -107,7 +107,7 @@ module.exports = {
     },
     getPendingCartByShopID: async function (shopID, userID) {
         const data = await Models.Shop.findOne({
-            where: { botID: String(shopID) },
+            where: {botID: String(shopID)},
             include: [{
                 model: Models.Category,
                 include: [{
@@ -121,7 +121,7 @@ module.exports = {
                         required: true,
                         through: {
                             attributes: ["quantity"],
-                            where: { quantity: { [Op.ne]: 0 } },     // Retrieve orders that has a quantity
+                            where: {quantity: {[Op.ne]: 0}},     // Retrieve orders that has a quantity
                         }
                     }],
                 }]
@@ -142,11 +142,16 @@ module.exports = {
         })
     },
     createVoucherUser: async function (userID, voucherID) {
-        return await Models.VoucherUser.create({
+
+        let voucherData = {
             voucherID: voucherID,
             isClaimed: true,
             userID: String(userID)
-        })
+        }
+
+        console.log(voucherData)
+
+        return await Models.VoucherUser.create({voucherData});
     },
     createNewPayment: async function (orderID, addressID, deliveryDate) {
         return await Models.Payment.create({
@@ -235,6 +240,7 @@ module.exports = {
     deleteExpiredOrders: async function (minutes) {
         const before = moment().subtract(minutes, "minutes").tz("Asia/Singapore").format("YYYY-MM-DD HH:mm:ss")
         const amount = await Models.Order.destroy({
+
             where: {
                 createdAt: {
                     [Op.lte]: before

@@ -1,16 +1,16 @@
-import { Sequelize } from "sequelize"
+import {Sequelize} from 'sequelize'
 
-
-const sequelize = new Sequelize(
-    process.env.PG_DATABASE as string,
-    process.env.PG_USER as string,
-    process.env.PG_PASSWORD,
-    {
-        host: process.env.PG_HOST,
-        dialect: "postgres",
-        //logging: true,
+export const sqliteConfig = {
+    production: {
+        database: 'papa_food_db',
+        dialect: 'sqlite' as 'sqlite',
+        storage: '../database/db.sqlite',
+        host: '127.0.0.1'
     }
+};
+
+const sequelize = new Sequelize('', '', '',
+    sqliteConfig.production
 )
 
-// sequelize.sync({ force: true })
 export default sequelize

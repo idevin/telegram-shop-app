@@ -1,5 +1,5 @@
 import React from "react"
-import classNames from "classnames"
+let classNames = require('classnames')
 
 
 type Props = {

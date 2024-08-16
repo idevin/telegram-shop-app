@@ -7,17 +7,21 @@ const welcomeScene = new Scenes.BaseScene("WELCOME_SCENE")
 
 welcomeScene.enter(async (ctx) => {
     Utils.initializeScene(ctx)
-    Utils.sendSystemMessage(ctx, Template.welcomeMessage(ctx.botInfo.first_name), Template.welcomeMenuButtons())
-    const voucherCode = await Voucher.generateVoucher(ctx)
-    Utils.sendSystemMessage(ctx, Template.voucherMessage(voucherCode)) 
+    Utils.sendSystemMessage(ctx, Template.welcomeMessage(ctx), Template.welcomeMenuButtons())
+
+    if (process.env.VOUCHER === true) {
+        const voucherCode = await Voucher.generateVoucher(ctx)
+
+        Utils.sendSystemMessage(ctx, Template.voucherMessage(voucherCode))
+    }
 })
 
 welcomeScene.on("message", async (ctx) => {
     Utils.updateUserMessageInState(ctx, ctx.message)
-
-    if (ctx.message.text === "📚 View Categories") {
+    console.log(ctx.message)
+    if (ctx.message.text === "📚 Categories") {
         ctx.scene.enter("CATEGORY_SCENE")
-    } else if (ctx.message.text === "🛒 View Cart") {
+    } else if (ctx.message.text === "🛒 Cart") {
         ctx.scene.enter("CART_SCENE")
     }
 })

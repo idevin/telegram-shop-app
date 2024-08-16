@@ -1,10 +1,10 @@
-const { Telegraf, session, Scenes, Markup } = require("telegraf")
+const {Telegraf, session, Scenes, Markup} = require("telegraf")
 const CustomScenes = require("./scenes")
-const Dummy = require("./modules/dummy")
 const Database = require("./database/actions")
 const Utils = require("./utils")
 const Template = require("./template")
 const express = require("express")
+const {createDummyData} = require("./modules/dummy");
 
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -26,18 +26,16 @@ bot.use(session())
 bot.use(stage.middleware())
 
 bot.command("start", async (ctx) => {
-    const shop = await Database.getShopByID(ctx.botInfo.id)
-    if (!shop) {
-        if (process.env.MODE === "demo")
-            await Dummy.createDummyData(ctx)
-        else
-            return await Utils.sendSystemMessage(ctx, "The shop has not yet been setup!")
-    }
+    // const shop = await Database.getShopByID(ctx.botInfo.id)
+
+    // if (shop) {
+    //     await createDummyData(ctx)
+    // }
     await validateUserAccount(ctx.from.id, ctx.from.first_name, ctx.botInfo.id, ctx.chat.id)          // Validate user accounts upon entering a shop
     await validateChatRecord(ctx.botInfo.id, ctx.from.id, ctx.chat.id)
     ctx.deleteMessage()
-    Utils.clearScene(ctx, true)
-    ctx.scene.enter("WELCOME_SCENE")
+    await Utils.clearScene(ctx, true)
+    await ctx.scene.enter("WELCOME_SCENE")
 })
 
 bot.command("setup", async (ctx) => {
@@ -76,7 +74,7 @@ bot.on("message", async (ctx) => {
     if (ctx.session.cleanUpState && ctx.session.cleanUpState.length > 0) {
         Utils.updateUserMessageInState(ctx, ctx.message)
     } else {
-        ctx.session.cleanUpState = [{ id: ctx.message.message_id, type: "user" }]
+        ctx.session.cleanUpState = [{id: ctx.message.message_id, type: "user"}]
     }
 })
 
@@ -84,13 +82,13 @@ bot.on("pre_checkout_query", async (ctx) => {
     await ctx.answerPreCheckoutQuery(true)
 })
 
-bot.launch({ dropPendingUpdates: true })
+bot.launch({dropPendingUpdates: true})
 
 process.once("SIGINT", () => bot.stop("SIGINT"))
 process.once("SIGTERM", () => bot.stop("SIGTERM"))
 
 const validateUserAccount = async (userID, userName) => {
-    var user = await Database.getUserByID(userID)
+    let user = await Database.getUserByID(userID)
     if (!user) {
         user = await Database.createUser(userID, userName)
     }
@@ -105,5 +103,5 @@ const validateChatRecord = async function (shopID, userID, chatID) {
 }
 
 const app = express()
-app.get("/", (req, res) => res.status(200).send({ message: "ok" }))
+app.get("/", (req, res) => res.status(200).send({message: "ok"}))
 app.listen(process.env.PORT || 3000)

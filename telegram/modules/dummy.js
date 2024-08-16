@@ -1,12 +1,12 @@
-const { Shop, Category, Product, User, Address, Voucher } = require("../database/models")
+const {Shop, Category, Product, User, Address, Voucher} = require("../database/models")
 const faker = require("faker")
 const _ = require("lodash")
 
 
 module.exports = {
     createDummyData: async function (ctx) {
-        var user = null
-        var shop = null
+        let user = null
+        let shop = null
         try {
             user = await User.create({
                 telegramID: String(ctx.from.id),
@@ -32,7 +32,7 @@ module.exports = {
             })
         } catch (error) {
             user = await User.findByPk(String(ctx.from.id))
-            shop = await Shop.findOne({ where: { name: ctx.botInfo.first_name } })
+            shop = await Shop.findOne({where: {name: ctx.botInfo.first_name}})
         }
 
         const category = await Category.create({
@@ -41,9 +41,9 @@ module.exports = {
             image: faker.image.imageUrl(),
         })
 
-        const randomProd = _.random(1, 5)
+        const randomProd = _.random(1, 8)
 
-        for (var i = 0; i < randomProd; i++) {
+        for (let i = 0; i < randomProd; i++) {
             console.log(category.toJSON().id)
             await Product.create({
                 name: faker.commerce.product(),
@@ -55,8 +55,8 @@ module.exports = {
             })
         }
 
-        const randomAddress = _.random(1, 2)
-        for (var i = 0; i < randomAddress; i++) {
+        const randomAddress = _.random(1, 8)
+        for (let i = 0; i < randomAddress; i++) {
             await Address.create({
                 userID: String(user.toJSON().telegramID),
                 addressLineOne: faker.address.streetAddress(),
@@ -64,7 +64,7 @@ module.exports = {
                 city: faker.address.city(),
                 postalCode: faker.address.zipCode(),
                 country: faker.address.country(),
-                mobile:faker.phone.phoneNumber(),
+                mobile: faker.phone.phoneNumber(),
             })
         }
     }
